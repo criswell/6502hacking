@@ -116,4 +116,5 @@ def test(c, path=None) -> None:
         path: Can be a path to a project to test, or a list of paths. If
               ``path`` is absent, all projects ``test`` will be run.
     """
+    build(c, path)
     exec_task(c, path, "test")
