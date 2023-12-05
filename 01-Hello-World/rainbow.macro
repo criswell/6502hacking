@@ -1,0 +1,8 @@
+gopher2600macro
+
+-- wait 30 frames for ROM init
+WAIT 30
+
+SCREENSHOT
+
+QUIT
