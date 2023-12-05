@@ -1,4 +1,7 @@
 *.swp
 *.swo
+*.zwc
 *~
 *.bin
+.in
+.out
