@@ -27,3 +27,13 @@ written (or will write) in my exploration of assembly language for the 6502.
 Most of it (probably all of it) will be specifically for the Atari 2600. That's
 really what I wanted to write software for as a kid, and it's what I'm most
 interested in now.
+
+## Building
+
+In addition to recently starting to pick up 6502 assembly, I've also recently
+started messing with [PyInvoke](https://pyinvoke.org/). So I figured I'd kill
+two birds with one stone in this repo by also handling automation with PyInvoke
+instead of GNU make (even though that does seem a bit silly with an assembly
+project).
+
+Use `inv --list` for invoke targets.
