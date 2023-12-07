@@ -2,6 +2,11 @@ name: Build and Test
 
 on: [push]
 
+env:
+  DASM_BIN: .bin/dasm
+  GOPHER_BIN: .bin/gopher2600_linux_amd64
+  DASMINC: .bin/machines/atari2600
+
 jobs:
   build_and_test:
     
@@ -35,8 +40,4 @@ jobs:
           out-file-path: .bin
 
       - name: Build Everything
-        run: |
-          export DASM_BIN=.bin/dasm
-          export GOPHER_BIN=.bin/gopher2600_linux_amd64
-          export DASMINC=.bin/machines/atari2600
-          inv build
+        run: inv build
