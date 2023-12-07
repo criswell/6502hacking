@@ -3,9 +3,9 @@ name: Build and Test
 on: [push]
 
 env:
-  DASM_BIN: .bin/dasm
-  GOPHER_BIN: .bin/gopher2600_linux_amd64
-  DASMINC: .bin/machines/atari2600
+  DASM_BIN: /tmp/bin/dasm
+  GOPHER_BIN: /tmp/bin/gopher2600_linux_amd64
+  DASMINC: /tmp/bin/machines/atari2600
 
 jobs:
   build_and_test:
@@ -29,7 +29,7 @@ jobs:
           repository: dasm-assembler/dasm
           tag: 2.20.14.1
           extract: true
-          out-file-path: .bin
+          out-file-path: /tmp/bin
 
       - name: Install Gopher2600
         uses: robinraju/release-downloader@v1.8
@@ -37,7 +37,7 @@ jobs:
           repository: JetSetIlly/Gopher2600
           tag: v0.27.0
           fileName: gopher2600_linux_amd64
-          out-file-path: .bin
+          out-file-path: /tmp/bin
 
       - name: Build Everything
         run: inv build
