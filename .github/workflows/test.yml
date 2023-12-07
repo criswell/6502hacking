@@ -27,14 +27,16 @@ jobs:
           out-file-path: .bin
 
       - name: Install Gopher2600
-        run: |
-          ls -la .bin
-          curl -O https://github.com/JetSetIlly/Gopher2600/releases/download/v0.27.0/gopher2600_linux_amd64 --output
-          chmod a+x ~/bin/gopher2600
+        uses: robinraju/release-downloader@v1.8
+        with:
+          repository: JetSetIlly/Gopher2600
+          tag: v0.27.0
+          fileName:gopher2600_linux_amd64
+          out-file-path: .bin
 
       - name: Build Everything
         run: |
-          export DASM_BIN=~/app/dasm
-          export GOPHER_BIN=~/bin/gopher2600
-          export DASMINC=~/app/machines/atari2600
+          export DASM_BIN=.bin/dasm
+          export GOPHER_BIN=.bin/gopher2600_linux_amd64
+          export DASMINC=.bin/machines/atari2600
           inv build
