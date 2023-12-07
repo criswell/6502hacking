@@ -42,3 +42,6 @@ jobs:
 
       - name: Build Everything
         run: inv build
+
+      - name: Test Everything
+        run: inv test
