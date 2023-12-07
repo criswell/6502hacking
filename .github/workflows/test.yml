@@ -29,6 +29,7 @@ jobs:
           repository: dasm-assembler/dasm
           tag: 2.20.14.1
           extract: true
+          fileName: dasm-2.20.14.1-linux-x64.tar.gz
           out-file-path: /tmp/bin
 
       - name: Install Gopher2600
