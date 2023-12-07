@@ -22,6 +22,7 @@ jobs:
         run: |
           mkdir -p ~/app
           curl https://github.com/dasm-assembler/dasm/releases/download/2.20.14.1/dasm-2.20.14.1-linux-x64.tar.gz --output ~/app/dasm.tar.gz
+          ls -lah
           cd ~/app/
           tar xzvf dasm.tar.gz
           chmod a+x dasm
