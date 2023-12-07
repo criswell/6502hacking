@@ -31,7 +31,7 @@ jobs:
         with:
           repository: JetSetIlly/Gopher2600
           tag: v0.27.0
-          fileName:gopher2600_linux_amd64
+          fileName: gopher2600_linux_amd64
           out-file-path: .bin
 
       - name: Build Everything
