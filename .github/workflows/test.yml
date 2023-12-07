@@ -18,21 +18,17 @@ jobs:
       - name: Setup PyInvoke
         run: pip install invoke
 
-      - name: Setup bin dir
-        run: mkdir -p ~/bin
-
       - name: Install DASM
         uses: robinraju/release-downloader@v1.8
         with:
           repository: dasm-assembler/dasm
           tag: 2.20.14.1
           extract: true
-          out-file-path: ~/bin
+          out-file-path: .bin
 
       - name: Install Gopher2600
         run: |
-          ls -la ~/bin
-          cd ~/bin
+          ls -la .bin
           curl -O https://github.com/JetSetIlly/Gopher2600/releases/download/v0.27.0/gopher2600_linux_amd64 --output
           chmod a+x ~/bin/gopher2600
 
