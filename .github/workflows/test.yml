@@ -40,6 +40,9 @@ jobs:
           fileName: gopher2600_linux_amd64
           out-file-path: /tmp/bin
 
+      - name: Exec perm on Gopher2600
+        run: chmod a+x $GOPHER_BIN
+
       - name: Build Everything
         run: inv build
 
