@@ -1,5 +1,7 @@
 # Sam's Zany 6502 Exploration
 
+![Build & Test](https://github.com/criswell/6502hacking/actions/workflows/test.yml/badge.svg)
+
 I am old enough to have had the Atari 2600 be my first video game console. I'm
 crazy friggin' old. The Atari specifically and video games in general are why I
 originally got into programming- as a kid, I wanted to write video games.
