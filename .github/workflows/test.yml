@@ -1,0 +1,41 @@
+name: Build and Test
+
+on: [push]
+
+jobs:
+  build_and_test:
+    
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.11
+
+      - name: Setup PyInvoke
+        run: pip install invoke
+
+      - name: Install DASM
+        run: |
+          mkdir -p ~/app
+          curl https://github.com/dasm-assembler/dasm/releases/download/2.20.14.1/dasm-2.20.14.1-linux-x64.tar.gz --ouput ~/app/dasm.tar.gz
+          cd ~/app/
+          tar xzvf dasm.tar.gz
+          chmod a+x dasm
+          cd ~/
+
+      - name: Install Gopher2600
+        run: |
+          mkdir -p ~/bin
+          curl https://github.com/JetSetIlly/Gopher2600/releases/download/v0.27.0/gopher2600_linux_amd64 --output ~/bin/gopher2600
+          chmod a+x ~/bin/gopher2600
+
+      - name: Build Everything
+        run: |
+          export DASM_BIN=~/app/dasm
+          export GOPHER_BIN=~/bin/gopher2600
+          export DASMINC=~/app/machines/atari2600
+          inv build

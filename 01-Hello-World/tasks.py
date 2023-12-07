@@ -12,11 +12,12 @@ ext_list = ".list-txt"
 def build(c):
     print(f"\n> Build...\n{'-' * 20}")
     inc_dir = os.getenv("DASMINC", ".")
+    dasm = os.getenv("DASM_BIN", "dasm")
     dasm_files = list(Path(c['work_dir']).glob('*.dasm'))
 
     for f in dasm_files:
         c.run(
-            f"dasm {f.parts[-1]} -I{inc_dir} -f3 -l{f.stem}{ext_list} -v2 -o{f.stem}{ext_bin}"
+            f"{dasm} {f.parts[-1]} -I{inc_dir} -f3 -l{f.stem}{ext_list} -v2 -o{f.stem}{ext_bin}"
         )
 
 
