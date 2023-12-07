@@ -15,6 +15,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Setup SDL
+        run: sudo apt install -y libsdl2
+
       - name: Setup Python
         uses: actions/setup-python@v4
         with:
