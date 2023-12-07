@@ -6,6 +6,7 @@ from util import mytask
 
 ext_bin = ".bin"
 ext_list = ".list-txt"
+ext_macro = ".macro"
 
 
 @mytask
@@ -37,3 +38,18 @@ def clean(c):
     print(f"\n> Clean...\n{'-' * 20}")
     c.run(f"rm -f *{ext_bin}")
     c.run(f"rm -f *{ext_list}")
+
+
+@mytask
+def test_gui(c):
+    print(f"\n> Test GUI...\n{'-' * 20}")
+    gopher = os.getenv("GOPHER_BIN", "gopher2600")
+    bin_files = list(Path(c['work_dir']).glob(f'*{ext_bin}'))
+
+    for f in bin_files:
+        macro_file = f"{f.stem}{ext_macro}"
+        if Path(f"{f.parents[0]}/{macro_file}").exists():
+            print(f"> Testing '{f}' with macro '{macro_file}'")
+            c.run(f"{gopher} run -macro {macro_file} {f.parts[-1]}")
+        else:
+            print(f"> No macro for '{f}', skipping...")

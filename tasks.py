@@ -117,3 +117,15 @@ def test(c, path=None) -> None:
               ``path`` is absent, all projects ``test`` will be run.
     """
     exec_task(c, path, "test")
+
+
+@task(optional=['path'])
+def test_gui(c, path=None) -> None:
+    """
+    Test a project or projects graphically with macros
+
+     Parameters:
+        path: Can be a path to a project to test, or a list of paths. If
+              ``path`` is absent, all projects ``test`` will be run.
+    """
+    exec_task(c, path, "test_gui")
