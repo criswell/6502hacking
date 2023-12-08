@@ -74,6 +74,7 @@ Main:
   jsr VerticalBlank
   jsr Background
   jsr Overscan
+  
   jmp Main
 
 
@@ -124,7 +125,18 @@ Background:
   ldy StartingColor
 bkgLoop:
   sty COLUBK
+
+  ; Timer++, if the Timer != NUMLINES, we skip, otherwise inc the color
+  inc Timer
+  lda Timer
+  cmp NUMLINES
+  bne skipInc
+
   iny ; inc the color
+  lda #0
+  sta Timer ; reset back to 0
+
+skipInc:
   sta WSYNC ; wait for sync
   inx
   cpx #192 ; 192 y-max
