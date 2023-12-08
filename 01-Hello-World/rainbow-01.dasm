@@ -1,0 +1,84 @@
+; Sam's wacky moving rainbow guy
+
+  processor 6502
+  include "vcs.h"
+  include "macro.h"
+
+; variable segment
+  seg.U VARS
+  org $80
+
+Color:  ds 1
+
+; code segment
+  seg CODE
+  org $f000
+
+; Where we start
+reset:
+  ldx #0
+  lda #0
+  CLEAN_START
+
+  lda Color
+  sta COLUBK
+
+startFrame:
+  ; Start with vblank processing
+  lda #0
+  sta VBLANK
+  ; Turn on VSYNC
+  lda #2
+  sta VSYNC
+
+  ; 3 scanlines of VSYNC
+  sta WSYNC
+  sta WSYNC
+  sta WSYNC
+
+  ; Turn off VSYNC
+  lda #0
+  sta VSYNC
+
+; Generate 37 scanlines of VBLANK
+  ldx #0
+verticalBlank:
+  sta WSYNC
+  inx
+  cpx #37
+  bne verticalBlank
+
+; Draw the background
+  ldx #0
+  ldy Color
+background:
+  sty COLUBK
+  iny
+  sta WSYNC
+  inx
+  cpx #192 ; 192 y-max
+  bne background
+
+; End of the playfield, turn back on vblank
+  lda #$42
+  sta VBLANK
+
+; Overscan for 30 scanlines
+  ldx #0
+overscan:
+  sta WSYNC
+  inx
+  cpx #30
+  bne overscan
+
+  ; inc color
+  inc Color
+  jmp startFrame
+
+
+; Set origin of 4k rom
+  org $fffa
+InterruptVectors:
+  .word reset
+  .word reset
+  .word reset
