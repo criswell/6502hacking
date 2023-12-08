@@ -1,0 +1,159 @@
+; Stretchy, configurable, rainbow
+; Author: Sam Hart
+; ---
+; Note on code style:
+;   I'm not happy with the general code style conventions I see out there for
+;   assembly code, particularly 6502 code. For example, the comments are
+;   hideous to my seasoned software engineer eyes. I'm going to try in this
+;   file to see if I can't come up with something I like. Here's what I want
+;
+;       * Readable - I want to be able to glance at the code and understand it.
+;                    Now, with assembly that can be hard, which is why you find
+;                    people commenting pretty much every line.
+;       * Organizational - I want my comments to show logical groupings and
+;                    general code organization.
+;       * Easy to type - I don't want to constantly have to hit shift or toggle
+;                    capslock. I know some people advocate CAPSing all the
+;                    opcode so you can quickly see what's an op and what's not
+;                    at a glance, but jesus that makes typing a bitch.
+;
+;   So, with these in mind here's what I propose for this file (and maybe it'll
+;   stick and I'll use it again, who knows?):
+;       * Comments on many lines (but not all) to explain what's happening
+;       * Comments at code section starts which use Markdown
+;       * Lowercase opcodes
+;       * Camel case labels/variables
+;       * ALL CAPS constants and segment labels
+;       * Subroutine/method labels are camel case starting with capital
+;       * Random jump point lavels are camel case starting with lowercase
+
+  processor 6502
+  include "vcs.h"
+  include "macro.h"
+
+;
+; # Constants
+;
+NUMLINES = 4 ; The number of lines before switching colors
+
+
+;
+; # Variable segment
+; 
+  seg.u VARS
+  org $80
+
+StartingColor:  ds 1
+Timer:          ds 1
+
+
+;
+; # Code segment - Start of Cart
+;
+  seg CODE
+  org $f000
+
+
+; ## InitSystem
+; ---
+; This is the entrypoint for the cart. From here, we "fall into" the main loop.
+InitSystem:
+  CLEAN_START
+  ; Use the default starting color as the background color
+  ; FIXME We should probably reset the starting color here, but I don't yet
+  ; know how to do that
+  lda StartingColor
+  sta COLUBK
+
+
+; ## Main Loop
+; ---
+; This is the main loop of the game
+Main:
+  jsr VerticalSync
+  jsr VerticalBlank
+  jsr Background
+  jsr Overscan
+  jmp Main
+
+
+; ## Vertical Sync:
+; ---
+; Moves beam to top of screen. This is start of every frame.
+VerticalSync:
+  ; vblank processing
+  lda #0
+  sta VBLANK
+  ; Turn on VSYNC
+  lda #2
+  sta VSYNC
+
+  ; 3 scanlines of VSYNC
+  sta WSYNC
+  sta WSYNC
+  sta WSYNC
+
+  ; Turn off VSYNC
+  lda #0
+  sta VSYNC
+
+  rts
+
+
+; ## Vertical Blank
+; ---
+; Generates 37 scanlines of VBLANK
+VerticalBlank:
+  ldx #0
+  lda #0
+verticalLoop:
+; Note the lowercase start. This indicates this is a jump point WITHIN another
+; subroutine.
+  sta WSYNC
+  inx
+  cpx #37
+  bne verticalLoop
+  rts
+
+
+; ## Draw the background
+; ---
+; Draws the background
+Background:
+  ldx #0
+  ldy StartingColor
+bkgLoop:
+  sty COLUBK
+  iny ; inc the color
+  sta WSYNC ; wait for sync
+  inx
+  cpx #192 ; 192 y-max
+  bne bkgLoop
+
+  ; End of the playfield, turn back on vblank
+  lda #$42
+  sta VBLANK
+  rts
+
+
+; ## Overscan
+; ---
+; Overscan will run for 30 scanlines
+Overscan:
+  ldx #0
+overscanLoop:
+  sta WSYNC
+  inx
+  cpx #30
+  bne overscanLoop
+
+  inc StartingColor
+  rts
+
+
+; # Set origin of 4k rom
+  org $fffa
+InterruptVectors:
+  .word InitSystem
+  .word InitSystem
+  .word InitSystem
